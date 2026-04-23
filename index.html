@@ -300,7 +300,9 @@
             </div>
         </header>
 
-        <form id="diagnosticForm">
+        <form id="diagnosticForm" name="diagnostico-pisos-turisticos" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="diagnostico-pisos-turisticos">
+        <input type="hidden" name="bot-field" style="display:none">
             <div class="success-message" id="successMessage">
                 ✅ Gracias por completar el formulario. Tu respuesta ha sido guardada. Pronto recibirás una recomendación personalizada.
             </div>
@@ -742,55 +744,12 @@
             progressFill.style.width = progress + '%';
         }
 
-        // Envío del formulario
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Recopilar datos
-            const formData = new FormData(form);
-            const data = {
-                nombre: formData.get('nombre'),
-                email: formData.get('email'),
-                telefono: formData.get('telefono'),
-                negocio: formData.get('negocio'),
-                apartamentos: formData.get('apartamentos'),
-                ocupacion: formData.get('ocupacion'),
-                presupuesto: formData.get('presupuesto'),
-                ticket: formData.get('ticket'),
-                audiencia: formData.getAll('audiencia'),
-                paises: formData.get('paises'),
-                idiomas: formData.getAll('idiomas'),
-                eventos: formData.getAll('eventos'),
-                formatos: formData.getAll('formatos'),
-                fotos: formData.get('fotos'),
-                frecuencia: formData.get('frecuencia'),
-                automatizacion: formData.get('automatizacion'),
-                integraciones: formData.getAll('integraciones'),
-                tracking: formData.get('tracking'),
-                comentarios: formData.get('comentarios'),
-                fecha: new Date().toISOString()
-            };
-
-            // Guardar en localStorage para demostración
-            localStorage.setItem('diagnosticData', JSON.stringify(data));
-
-            // Mostrar mensaje de éxito
-            successMessage.classList.add('show');
-
-            // Simular envío (en producción, esto iría a un servidor)
-            console.log('Datos del diagnóstico:', data);
-
-            // Scroll a mensaje de éxito
-            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            // Deshabilitar botón de submit
+        // Envío del formulario - Netlify Forms
+        form.addEventListener('submit', function(e) {
+            // Dejar que Netlify procese el formulario nativamente
             const submitBtn = form.querySelector('button[type="submit"]');
-            submitBtn.textContent = '✓ Enviado';
+            submitBtn.textContent = 'Enviando...';
             submitBtn.disabled = true;
-
-            setTimeout(() => {
-                alert('✅ Formulario enviado. Pronto recibirás una recomendación personalizada en tu email.');
-            }, 1000);
         });
 
         // Inicializar progreso

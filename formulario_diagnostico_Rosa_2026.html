@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico: Automatización de Campañas Instagram - Pisos Turísticos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --primary-light: #A78BFA;
+            --secondary: #EC4899;
+            --success: #10B981;
+            --bg: #0F172A;
+            --bg-secondary: #1E293B;
+            --text: #F1F5F9;
+            --text-muted: #CBD5E1;
+            --border: #334155;
+            --accent: #06B6D4;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, #1a1f3a 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-top: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        form {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 1em;
+        }
+
+        .required {
+            color: var(--secondary);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .radio-item:hover,
+        .checkbox-item:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .radio-item label,
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .helper-text {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-top: 5px;
+            margin-left: 32px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: flex-end;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: var(--success);
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            form {
+                padding: 25px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+        .info-box {
+            background: rgba(6, 182, 212, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="subtitle">📱 DIAGNÓSTICO ESTRATÉGICO</div>
+            <h1>Automatización de Campañas Instagram</h1>
+            <p class="subtitle">Para Pisos Turísticos en Granada</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </header>
+
+        <form id="diagnosticForm">
+            <div class="success-message" id="successMessage">
+                ✅ Gracias por completar el formulario. Tu respuesta ha sido guardada. Pronto recibirás una recomendación personalizada.
+            </div>
+
+            <!-- SECCIÓN 1: DATOS BÁSICOS -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">👤</span>
+                    Datos Básicos
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Tu nombre <span class="required">*</span></label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej: María García" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Teléfono (WhatsApp)</label>
+                    <input type="text" id="telefono" name="telefono" placeholder="+34 6XX XXX XXX">
+                </div>
+
+                <div class="form-group">
+                    <label for="negocio">Nombre del negocio <span class="required">*</span></label>
+                    <input type="text" id="negocio" name="negocio" placeholder="Ej: Granada Luxury Apartments">
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: NEGOCIO -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📊</span>
+                    Sobre Tu Negocio
+                </div>
+
+                <div class="info-box">
+                    💡 Esto nos ayuda a entender la escala y el presupuesto de tu negocio.
+                </div>
+
+                <div class="form-group">
+                    <label for="apartamentos">¿Cuántos apartamentos tienes? <span class="required">*</span></label>
+                    <input type="number" id="apartamentos" name="apartamentos" placeholder="Ej: 3" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="ocupacion">Ocupación promedio actual <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="ocu1" name="ocupacion" value="0-30" required>
+                            <label for="ocu1">0-30% (bajo)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="ocu2" name="ocupacion" value="30-60">
+                            <label for="ocu2">30-60% (medio)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="ocu3" name="ocupacion" value="60-80">
+                            <label for="ocu3">60-80% (bueno)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="ocu4" name="ocupacion" value="80-100">
+                            <label for="ocu4">80-100% (muy bueno)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="presupuesto">Presupuesto mensual para campañas de pago <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="presup1" name="presupuesto" value="sin-presupuesto" required>
+                            <label for="presup1">Sin presupuesto aún (puro orgánico)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="presup2" name="presupuesto" value="100-300">
+                            <label for="presup2">€100-300/mes</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="presup3" name="presupuesto" value="300-800">
+                            <label for="presup3">€300-800/mes</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="presup4" name="presupuesto" value="800+">
+                            <label for="presup4">€800+/mes</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ticket">Precio promedio por noche <span class="required">*</span></label>
+                    <input type="number" id="ticket" name="ticket" placeholder="Ej: 75" min="1" required>
+                    <div class="helper-text">Esto nos ayuda a calcular ROAS de campañas</div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 3: AUDIENCIA -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">🎯</span>
+                    Tu Audiencia
+                </div>
+
+                <div class="info-box">
+                    💡 Esto determina dónde enfocamos las campañas y qué idiomas usar.
+                </div>
+
+                <div class="form-group">
+                    <label>¿A quién le vendes principalmente? <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="aud1" name="audiencia" value="parejas">
+                            <label for="aud1">Parejas</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="aud2" name="audiencia" value="familias">
+                            <label for="aud2">Familias</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="aud3" name="audiencia" value="grupos-amigos">
+                            <label for="aud3">Grupos de amigos</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="aud4" name="audiencia" value="mochileros">
+                            <label for="aud4">Mochileros / budget</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="aud5" name="audiencia" value="lujo">
+                            <label for="aud5">Viajeros de lujo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="paises">Principales mercados geográficos <span class="required">*</span></label>
+                    <textarea id="paises" name="paises" placeholder="Ej: España, Francia, Alemania, Reino Unido" required></textarea>
+                    <div class="helper-text">Escribe separados por comas</div>
+                </div>
+
+                <div class="form-group">
+                    <label>¿Qué idiomas necesitas? <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="idioma1" name="idiomas" value="es" checked>
+                            <label for="idioma1">Español</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="idioma2" name="idiomas" value="en">
+                            <label for="idioma2">Inglés</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="idioma3" name="idiomas" value="fr">
+                            <label for="idioma3">Francés</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="idioma4" name="idiomas" value="de">
+                            <label for="idioma4">Alemán</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="idioma5" name="idiomas" value="it">
+                            <label for="idioma5">Italiano</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 4: CONTENIDO -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">📸</span>
+                    Contenido & Estrategia
+                </div>
+
+                <div class="info-box">
+                    💡 Esto define qué herramientas de diseño y automatización necesitas.
+                </div>
+
+                <div class="form-group">
+                    <label>¿Sobre qué eventos de Granada quieres publicar? <span class="required">*</span></label>
+                    <div class="info-box">
+                        💡 Elige los que creas que atraerían a tus clientes
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="evento1" name="eventos" value="semana-santa">
+                            <label for="evento1">Semana Santa (procesiones, ambiente especial)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="evento2" name="eventos" value="conciertos">
+                            <label for="evento2">Conciertos y festivales de música</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="evento3" name="eventos" value="culturales">
+                            <label for="evento3">Eventos culturales (exposiciones, teatro, cine)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="evento4" name="eventos" value="gastronom">
+                            <label for="evento4">Gastronomía (tapas, comida típica, restaurantes)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="evento5" name="eventos" value="naturales">
+                            <label for="evento5">Naturaleza (senderismo, la Alhambra, vistas hermosas)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>¿Qué tipo de contenido prefieres? <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="formato1" name="formatos" value="posts-estaticos">
+                            <label for="formato1"><strong>Posts con fotos</strong> - Foto + texto sobre el evento</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="formato2" name="formatos" value="carousels">
+                            <label for="formato2"><strong>Carruseles</strong> - Varias fotos seguidas que el usuario desliza</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="formato3" name="formatos" value="reels">
+                            <label for="formato3"><strong>Videos cortos (Reels)</strong> - Vídeos de 15-60 segundos (los que mejor funcionan ahora)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fotos">¿Tienes fotos de tus apartamentos listas? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="fotos1" name="fotos" value="si-muchas" required>
+                            <label for="fotos1">Sí, tengo muchas (50+)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="fotos2" name="fotos" value="si-algunas">
+                            <label for="fotos2">Algunas (10-50)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="fotos3" name="fotos" value="pocas">
+                            <label for="fotos3">Pocas (menos de 10)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="fotos4" name="fotos" value="ninguna">
+                            <label for="fotos4">No tengo, necesito apoyo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="frecuencia">¿Con qué frecuencia quieres publicar? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="freq1" name="frecuencia" value="diaria" required>
+                            <label for="freq1">Diaria (1 post/day)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="freq2" name="frecuencia" value="3-semana">
+                            <label for="freq2">3 veces por semana</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="freq3" name="frecuencia" value="2-semana">
+                            <label for="freq3">2 veces por semana</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="freq4" name="frecuencia" value="semanal">
+                            <label for="freq4">Semanal</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 5: AUTOMATIZACIÓN -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">⚙️</span>
+                    Nivel de Automatización
+                </div>
+
+                <div class="info-box">
+                    💡 Esto determina si necesitamos: solo diseños, automatización parcial, o full automatización.
+                </div>
+
+                <div class="form-group">
+                    <label for="automatizacion">¿Cómo prefieres que funcione? <span class="required">*</span></label>
+                    <div class="info-box">
+                        💡 Esto define cuánto trabajo nosotros hacemos y cuánto tú controlas.
+                    </div>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="auto1" name="automatizacion" value="full" required onchange="toggleAutomationDetails('full')">
+                            <label for="auto1">
+                                <strong>Opción 1 - Full Automático (Nosotros hacemos TODO):</strong> Nosotros buscamos el contenido, lo diseñamos, lo calendarizamos, lo programamos por fechas, lanzamos las campañas de pago. Tú solo apruebas los presupuestos de tus campañas.
+                            </label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="auto2" name="automatizacion" value="semi" required onchange="toggleAutomationDetails('semi')">
+                            <label for="auto2">
+                                <strong>Opción 2 - Semiautomático (Elige qué haces):</strong> Marca abajo exactamente qué quieres que nosotros hagamos. Lo que no marques, tú lo seguirás haciendo.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="semi-details" style="display:none; margin-top:20px; padding:15px; background:rgba(139,92,246,0.05); border-left:3px solid var(--primary); border-radius:8px;">
+                    <label style="display:block; margin-bottom:15px; font-weight:600;">¿Qué quieres que nosotros hagamos? (marca lo que aplicable):</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="semi1" name="semi-automatizacion" value="buscar-contenido">
+                            <label for="semi1">Buscar y conseguir contenido (fotos, ideas, eventos)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="semi2" name="semi-automatizacion" value="disenar">
+                            <label for="semi2">Diseñar los posts (colores, tipografía, layout)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="semi3" name="semi-automatizacion" value="escribir-copy">
+                            <label for="semi3">Escribir el texto/copy de los posts</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="semi4" name="semi-automatizacion" value="calendarizar">
+                            <label for="semi4">Crear el calendario (qué se publica cuándo)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="semi5" name="semi-automatizacion" value="programar">
+                            <label for="semi5">Programar los posts en Instagram automáticamente</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="semi6" name="semi-automatizacion" value="lanzar-campanas">
+                            <label for="semi6">Lanzar y gestionar las campañas de pago en Meta Ads</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="semi7" name="semi-automatizacion" value="monitorear">
+                            <label for="semi7">Monitorear resultados y reportes mensuales</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="integraciones">¿Dónde vendes normalmente tus apartamentos? <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="int1" name="integraciones" value="airbnb">
+                            <label for="int1">Airbnb</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="int2" name="integraciones" value="booking">
+                            <label for="int2">Booking.com</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="int3" name="integraciones" value="vrbo">
+                            <label for="int3">VRBO / HomeAway</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="int4" name="integraciones" value="web-propia">
+                            <label for="int4">Tengo mi propia web / página</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="int5" name="integraciones" value="whatsapp">
+                            <label for="int5">WhatsApp o email</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tracking">¿Quieres saber cuántas personas ven tus anuncios y cuántos presupuesto gastan? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="track1" name="tracking" value="si">
+                            <label for="track1">Sí, quiero ver números (cuántas personas clican, cuánto cuesta cada clic)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="track2" name="tracking" value="basico">
+                            <label for="track2">Solo lo básico (cuántos likes y comentarios recibo)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="track3" name="tracking" value="no">
+                            <label for="track3">No me importa, que se publique simplemente</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 6: COMENTARIOS -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-icon">💬</span>
+                    Información Adicional
+                </div>
+
+                <div class="form-group">
+                    <label for="comentarios">¿Hay algo más que debería saber? Incluye desafíos, restricciones, o ideas específicas:</label>
+                    <textarea id="comentarios" name="comentarios" placeholder="Ej: Ya tengo un perfil Instagram con 2k followers, tengo un calendario de eventos listo en Excel..."></textarea>
+                </div>
+            </div>
+
+            <!-- BOTONES -->
+            <div class="button-group">
+                <button type="reset" class="btn-secondary">Limpiar formulario</button>
+                <button type="submit" class="btn-primary">Enviar y obtener recomendación</button>
+            </div>
+        </form>
+
+        <div class="footer">
+            <p>Tus respuestas se analizarán para crear un plan personalizado. Recibirás una recomendación detallada en tu email.</p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('diagnosticForm');
+        const progressFill = document.querySelector('.progress-fill');
+        const successMessage = document.getElementById('successMessage');
+
+        // Actualizar progreso
+        form.addEventListener('change', updateProgress);
+        form.addEventListener('input', updateProgress);
+
+        function toggleAutomationDetails(option) {
+            const semiDetails = document.getElementById('semi-details');
+            if (option === 'semi') {
+                semiDetails.style.display = 'block';
+            } else {
+                semiDetails.style.display = 'none';
+            }
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const inputs = form.querySelectorAll('input, textarea, select');
+            let filled = 0;
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    if (input.checked) filled++;
+                } else if (input.value.trim()) {
+                    filled++;
+                }
+            });
+            const progress = (filled / inputs.length) * 100;
+            progressFill.style.width = progress + '%';
+        }
+
+        // Envío del formulario
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Recopilar datos
+            const formData = new FormData(form);
+            const data = {
+                nombre: formData.get('nombre'),
+                email: formData.get('email'),
+                telefono: formData.get('telefono'),
+                negocio: formData.get('negocio'),
+                apartamentos: formData.get('apartamentos'),
+                ocupacion: formData.get('ocupacion'),
+                presupuesto: formData.get('presupuesto'),
+                ticket: formData.get('ticket'),
+                audiencia: formData.getAll('audiencia'),
+                paises: formData.get('paises'),
+                idiomas: formData.getAll('idiomas'),
+                eventos: formData.getAll('eventos'),
+                formatos: formData.getAll('formatos'),
+                fotos: formData.get('fotos'),
+                frecuencia: formData.get('frecuencia'),
+                automatizacion: formData.get('automatizacion'),
+                integraciones: formData.getAll('integraciones'),
+                tracking: formData.get('tracking'),
+                comentarios: formData.get('comentarios'),
+                fecha: new Date().toISOString()
+            };
+
+            // Guardar en localStorage para demostración
+            localStorage.setItem('diagnosticData', JSON.stringify(data));
+
+            // Mostrar mensaje de éxito
+            successMessage.classList.add('show');
+
+            // Simular envío (en producción, esto iría a un servidor)
+            console.log('Datos del diagnóstico:', data);
+
+            // Scroll a mensaje de éxito
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Deshabilitar botón de submit
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.textContent = '✓ Enviado';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                alert('✅ Formulario enviado. Pronto recibirás una recomendación personalizada en tu email.');
+            }, 1000);
+        });
+
+        // Inicializar progreso
+        updateProgress();
+    </script>
+</body>
+</html>
